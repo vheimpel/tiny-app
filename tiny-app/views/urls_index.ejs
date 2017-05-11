@@ -2,12 +2,22 @@
 <html lang="en">
 <%- include('./partials/_header') %>
 
-  <ul>
-    <li><a href="<%= longURL %>"><%= newShortURL %></a></li>
-     <form action=<%=`/urls/${newShortURL}/delete`%> method="POST" style="margin:150px;">
-      <input type="submit" value="delete">
-      </form>
+   <ul>
+    <% for (let url in urls) { %>
+      <li>
+     <%= url %> . . . <%= urls[url]%>
+
+     <!-- edit button -->
+     <a href="/urls/<%=url%>">Edit</a>
+
+     <!-- delete button -->
+     <form style="margin:5px;" method="POST" action=/urls/<%=url%>/delete>
+     <input type="submit" value="Delete"></form>
+      </li>
+
+    <% } %>
   </ul>
+
 
 </body>
 </html>

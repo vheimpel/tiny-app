@@ -32,7 +32,7 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
+  res.json(urlDatabase[0]);
 });
 
 app.get("/urls", (req, res) => {
@@ -46,12 +46,6 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
-app.get("/urls/:id", (req, res) => {
-  let templateVars = { newShortURL: req.params.id, longURL: urlDatabase[req.params.id]};
-  res.render("urls_index", templateVars);
-  console.log(req)
-});
-
 app.post("/urls", (req, res) => {
   // console.log(req.body.longURL);  // debug statement to see POST parameters
   let newShortUrl = generateRandomString();
@@ -59,9 +53,22 @@ app.post("/urls", (req, res) => {
   res.redirect("/urls/" + newShortUrl);         // Respond with 'Ok' (we will replace this)
 });
 
+app.get("/urls/:id", (req, res) => {
+  let templateVars = { newShortURL: req.params.id, longURL: urlDatabase[req.params.id]};
+  res.render("urls_show", templateVars);
+  console.log(req.params.id)
+});
+
 app.post('/urls/:id/delete', (req, res) => {
   delete urlDatabase[req.params.id];
-  res.redirect('/');
+  res.redirect('/urls');
+});
+
+app.post('/urls/:shortURL', (req, res) => {
+  const id = req.params.shortURL;
+  urlDatabase[id] = req.body.updateField;
+
+  res.redirect('/urls')
 });
 
 app.listen(PORT, () => {
